@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: 'mariadb-operator-crds'
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  namespace: argocd
+
+spec:
+  project: default
+  source:
+    repoURL: 'https://helm.mariadb.com/mariadb-operator'
+    chart: 'mariadb-operator-crds'
+    targetRevision: '25.10.2'
+
+  destination:
+    namespace: mariadb
+    server: https://kubernetes.default.svc
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

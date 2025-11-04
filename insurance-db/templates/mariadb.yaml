@@ -1,7 +1,9 @@
 apiVersion: k8s.mariadb.com/v1alpha1
 kind: MariaDB
+
 metadata:
   name: mariadb
+
 spec:
   image: mariadb:10.11.2
   rootPasswordSecretKeyRef:
@@ -19,7 +21,7 @@ spec:
 
   storage:
     size: 1Gi
-    storageClassName: ebs-sc
+    # storageClassName: ebs-sc
 
   affinity:
     antiAffinityEnabled: true
