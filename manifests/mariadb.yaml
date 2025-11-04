@@ -1,0 +1,46 @@
+apiVersion: k8s.mariadb.com/v1alpha1
+kind: MariaDB
+metadata:
+  name: mariadb
+spec:
+  image: mariadb:10.11.2
+  rootPasswordSecretKeyRef:
+    name: mariadb
+    key: password
+
+  username: mariadb
+  passwordSecretKeyRef:
+    name: mariadb-password
+    key: password
+    generate: true
+  database: mariadb
+
+  port: 3306
+
+  storage:
+    size: 1Gi
+    storageClassName: ebs-sc
+
+  affinity:
+    antiAffinityEnabled: true
+
+  service:
+    type: ClusterIP
+
+  resources:
+    requests:
+      cpu: 300m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+  metrics:
+    enabled: true
+
+  tls:
+    enabled: false
+
+  # HA 구성
+  replicas: 3
+  galera:
+    enabled: true
