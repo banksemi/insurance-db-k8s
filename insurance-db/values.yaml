@@ -1,2 +1,5 @@
 mariadb:
   imageTag: 10.11.2
+
+ingress:
+  host: "example.com"
