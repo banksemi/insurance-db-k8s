@@ -20,12 +20,22 @@ spec:
         - name: php-fpm
           image: {{ .Values.backend.image | required "backend.image is required" }}
           ports:
-            - containerPort: 9000
-          volumeMounts:
-            - name: php-fpm-config
-              mountPath: /usr/local/etc/php-fpm.d/www.conf
-              subPath: www.conf
+            - containerPort: 80
           imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: "Asia/Seoul"
+            - name: MYSQL_HOST
+              value: mariadb
+            - name: MYSQL_DATABASE
+              value: {{ .Values.mariadb.database }}
+            - name: MYSQL_USER
+              value: {{ .Values.mariadb.username }}
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-password
+                  key: password
 
       volumes:
         - name: php-fpm-config
