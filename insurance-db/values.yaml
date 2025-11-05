@@ -3,3 +3,6 @@ mariadb:
 
 ingress:
   host: "example.com"
+
+backend:
+  image: ''

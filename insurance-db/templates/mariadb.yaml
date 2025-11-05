@@ -5,7 +5,7 @@ metadata:
   name: mariadb
 
 spec:
-  image: mariadb:{{ .Values.mariadb.imageTag }}
+  image: "mariadb:{{ .Values.mariadb.imageTag }}"
   rootPasswordSecretKeyRef:
     name: mariadb
     key: password

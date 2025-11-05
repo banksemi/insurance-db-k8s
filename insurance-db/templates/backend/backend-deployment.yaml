@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: backend-deployment
+
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-app
+
+  template:
+    metadata:
+      labels:
+        app: backend-app
+    spec:
+      containers:
+        - name: php-fpm
+          image: {{ .Values.backend.image | required "backend.image is required" }}
+          ports:
+            - containerPort: 9000
+          volumeMounts:
+            - name: php-fpm-config
+              mountPath: /usr/local/etc/php-fpm.d/www.conf
+              subPath: www.conf
+          imagePullPolicy: Always
+
+      volumes:
+      - name: php-fpm-config
+        configMap:
+          name: php-fpm-config
