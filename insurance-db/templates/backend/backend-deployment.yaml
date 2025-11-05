@@ -15,6 +15,7 @@ spec:
       labels:
         app: backend-app
     spec:
+      serviceAccountName: registry-account
       containers:
         - name: php-fpm
           image: {{ .Values.backend.image | required "backend.image is required" }}
@@ -27,6 +28,6 @@ spec:
           imagePullPolicy: Always
 
       volumes:
-      - name: php-fpm-config
-        configMap:
-          name: php-fpm-config
+        - name: php-fpm-config
+          configMap:
+            name: php-fpm-config
