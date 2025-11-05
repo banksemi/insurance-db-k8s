@@ -1,0 +1,2 @@
+mariadb:
+  imageTag: 10.11.2
