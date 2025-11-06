@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: backend-deployment
 
+  annotations:
+    checksum/config: {{ include (print $.Template.BasePath "/backend/php-fpm-configmap.yaml") . | sha256sum }}
+
 spec:
   replicas: 3
   selector:
@@ -22,6 +25,10 @@ spec:
           ports:
             - containerPort: 80
           imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /usr/local/etc/php-fpm.d/www.conf
+              name: php-fpm-config
+              subPath: www.conf # 특정 파일만 마운트, mountPath에도 존재해야함
           env:
             - name: TZ
               value: "Asia/Seoul"
