@@ -3,11 +3,6 @@ kind: Deployment
 
 metadata:
   name: backend-deployment
-
-  annotations:
-    checksum/php-fpm-config: {{ include (print $.Template.BasePath "/backend/php-fpm-configmap.yaml") . | sha256sum }}
-    checksum/php-ini-config: {{ include (print $.Template.BasePath "/backend/php-ini-configmap.yaml") . | sha256sum }}
-
 spec:
   replicas: 3
   selector:
@@ -16,6 +11,9 @@ spec:
 
   template:
     metadata:
+      annotations:
+        checksum/php-fpm-config: {{ include (print $.Template.BasePath "/backend/php-fpm-configmap.yaml") . | sha256sum }}
+        checksum/php-ini-config: {{ include (print $.Template.BasePath "/backend/php-ini-configmap.yaml") . | sha256sum }}
       labels:
         app: backend-app
     spec:
