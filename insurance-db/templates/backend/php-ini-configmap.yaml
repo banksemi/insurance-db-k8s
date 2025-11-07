@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: php-ini-config
+data:
+  custom.ini: |
+    error_reporting = E_ALL
+    display_errors = Off
+
+    log_errors = On
+    error_log = /dev/stderr
+    opcache.error_log = /dev/stderr
+
+    session.save_path = "/session"
+
+    upload_max_filesize = 100M
+    post_max_size = 100M
+
+    # 너무 많은 에러 로그가 nginx로 전달되면 버퍼 오류가 발생.
+    # 이 문제로 인해 엑셀 다운로드 기능이 작동하지 않았던 히스토리 존재.
+    # https://github.com/docker-library/php/issues/878
+    fastcgi.logging = off

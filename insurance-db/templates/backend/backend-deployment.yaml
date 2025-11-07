@@ -5,7 +5,8 @@ metadata:
   name: backend-deployment
 
   annotations:
-    checksum/config: {{ include (print $.Template.BasePath "/backend/php-fpm-configmap.yaml") . | sha256sum }}
+    checksum/php-fpm-config: {{ include (print $.Template.BasePath "/backend/php-fpm-configmap.yaml") . | sha256sum }}
+    checksum/php-ini-config: {{ include (print $.Template.BasePath "/backend/php-ini-configmap.yaml") . | sha256sum }}
 
 spec:
   replicas: 3
@@ -26,6 +27,9 @@ spec:
             - containerPort: 80
           imagePullPolicy: Always
           volumeMounts:
+            - mountPath: /usr/local/etc/php/conf.d/custom.ini
+              name: php-ini-volume
+              subPath: custom.ini
             - mountPath: /usr/local/etc/php-fpm.d/www.conf
               name: php-fpm-config
               subPath: www.conf # 특정 파일만 마운트, mountPath에도 존재해야함
@@ -48,3 +52,6 @@ spec:
         - name: php-fpm-config
           configMap:
             name: php-fpm-config
+        - name: php-ini-volume
+          configMap:
+            name: php-ini-config
