@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    server {
+        listen 80;
+        listen [::]:80;
+
+        root /var/www/html;
+        index index.php index.html index.htm;
+        client_max_body_size 100M;
+
+
+        location ~ \.php$ {
+            fastcgi_pass   php-backend-service:9000;
+            include fastcgi_params;
+            fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+            fastcgi_param PATH_INFO $fastcgi_path_info;
+
+            fastcgi_buffering               on;
+            fastcgi_buffer_size             16k;
+            fastcgi_buffers                 32 16k;
+        }
+
+        location ~ /\. {
+            deny all;
+        }
+    }

@@ -7,22 +7,22 @@ spec:
   replicas: 3
   selector:
     matchLabels:
-      app: backend-app
+      app: php-backend-app
 
   template:
     metadata:
       annotations:
-        checksum/php-fpm-config: {{ include (print $.Template.BasePath "/backend/php-fpm-configmap.yaml") . | sha256sum }}
-        checksum/php-ini-config: {{ include (print $.Template.BasePath "/backend/php-ini-configmap.yaml") . | sha256sum }}
+        checksum/php-fpm-config: {{ include (print $.Template.BasePath "/backend/php-fpm/php-fpm-configmap.yaml") . | sha256sum }}
+        checksum/php-ini-config: {{ include (print $.Template.BasePath "/backend/php-fpm/php-ini-configmap.yaml") . | sha256sum }}
       labels:
-        app: backend-app
+        app: php-backend-app
     spec:
       serviceAccountName: registry-account
       containers:
         - name: php-fpm
           image: {{ .Values.backend.image | required "backend.image is required" }}
           ports:
-            - containerPort: 80
+            - containerPort: 9000
           imagePullPolicy: Always
           volumeMounts:
             - mountPath: /usr/local/etc/php/conf.d/custom.ini
@@ -45,7 +45,8 @@ spec:
                 secretKeyRef:
                   name: mariadb-password
                   key: password
-
+          command:
+            - php-fpm
       volumes:
         - name: php-fpm-config
           configMap:

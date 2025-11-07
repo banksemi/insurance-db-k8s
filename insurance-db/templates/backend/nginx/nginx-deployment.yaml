@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-app
+
+  template:
+    metadata:
+      annotations:
+        checksum/nginx-conf: {{ include (print $.Template.BasePath "/backend/nginx/nginx-configmap.yaml") . | sha256sum }}
+      labels:
+        app: nginx-app
+    spec:
+      serviceAccountName: registry-account
+      containers:
+        - name: nginx-container
+          image: {{ .Values.backend.image | required "backend.image is required" }}
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /etc/nginx/http.d/default.conf
+              name: nginx-config-volume
+              subPath: default.conf
+          env:
+            - name: TZ
+              value: "Asia/Seoul"
+          command:
+            - nginx
+            - "-g"
+            - "daemon off;"
+      volumes:
+        - name: nginx-config-volume
+          configMap:
+            name: nginx-config
