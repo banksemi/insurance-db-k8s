@@ -11,7 +11,8 @@ data:
     error_log = /dev/stderr
     opcache.error_log = /dev/stderr
 
-    session.save_path = "/session"
+    session.save_handler = "redis"
+    session.save_path = "tcp://redis-service:6379"
 
     upload_max_filesize = 100M
     post_max_size = 100M
