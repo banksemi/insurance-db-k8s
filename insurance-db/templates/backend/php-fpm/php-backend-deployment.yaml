@@ -51,6 +51,14 @@ spec:
                   key: password
           command:
             - php-fpm
+          readinessProbe:
+            tcpSocket:
+              port: 9000
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh","-c","/bin/sleep 3; kill -SIGQUIT 1"]
+
       volumes:
         - name: php-fpm-config
           configMap:

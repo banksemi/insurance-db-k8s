@@ -17,3 +17,6 @@ data:
     pm.process_idle_timeout = 10s;
     pm.max_children = 20;
     pm.max_requests = 500;
+
+    [global]
+    process_control_timeout = 10;
