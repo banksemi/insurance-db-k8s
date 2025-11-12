@@ -8,3 +8,5 @@ ingress:
 
 backend:
   image: ''
+
+siteName: 'Demo Site'
