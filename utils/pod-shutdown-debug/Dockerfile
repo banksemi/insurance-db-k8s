@@ -1,4 +1,5 @@
 FROM python:3.13
+ENV PYTHONUNBUFFERED 1 # 파이썬 로그가 바로 출력되도록 설정
 
 WORKDIR /app
 COPY requirements.txt /app/

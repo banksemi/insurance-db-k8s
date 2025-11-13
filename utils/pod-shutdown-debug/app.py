@@ -1,4 +1,5 @@
 import asyncio
+import signal
 import logging
 import uvicorn
 
@@ -23,7 +24,6 @@ class Counter:
     def get_new_count(self):
         self.count += 1
         return self.count
-import signal
 
 signal_map = {
     signal.SIGINT: 'SIGINT',
